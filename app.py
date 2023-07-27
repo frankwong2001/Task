@@ -1,28 +1,47 @@
-from flask import Flask, render_template
-import pandas as pd
+import csv
+from flask import Flask, render_template, jsonify
 
 app = Flask(__name__)
 
+def read_csv_file(file_path):
+    data = []
+    with open(file_path, 'r') as csvfile:
+        csvreader = csv.DictReader(csvfile)
+        for row in csvreader:
+            data.append(row)
+    return data
+
 @app.route('/')
-def display_tables():
-    # Read data from CSV file for Table 1
-    df_table1 = pd.read_csv('Table_Input.csv')
+def display_table1():
+    # Read data from table1.csv
+    data = read_csv_file('https://raw.githubusercontent.com/frankwong2001/Task/main/Table_Input.csv')
+    return render_template('table1.html', data=data)
+
+@app.route('/table2-data')
+def get_table2_data():
+    # Read data from table1.csv
+    data = read_csv_file('https://raw.githubusercontent.com/YourGitHubUsername/YourRepositoryName/main/table1.csv')
     
     # Calculate Table 2 values
-    alpha = df_table1.loc[df_table1['Index'] == 'A5', 'Value'].values[0] + df_table1.loc[df_table1['Index'] == 'A20', 'Value'].values[0]
-    beta = df_table1.loc[df_table1['Index'] == 'A15', 'Value'].values[0] / df_table1.loc[df_table1['Index'] == 'A7', 'Value'].values[0]
-    charlie = df_table1.loc[df_table1['Index'] == 'A13', 'Value'].values[0] * df_table1.loc[df_table1['Index'] == 'A12', 'Value'].values[0]
-    
-    # Prepare data for Table 2
-    table2_data = [
-        {'Category': 'Alpha', 'Value': alpha},
-        {'Category': 'Beta', 'Value': beta},
-        {'Category': 'Charlie', 'Value': charlie}
-    ]
-    
-    # Render the HTML template with both tables
-    return render_template('tables.html', table1=df_table1.to_dict('records'), table2=table2_data)
+    a5_value = int(data[4]['Value'])
+    a20_value = int(data[19]['Value'])
+    alpha_value = a5_value + a20_value
+
+    a15_value = int(data[14]['Value'])
+    a7_value = int(data[6]['Value'])
+    beta_value = a15_value / a7_value
+
+    a13_value = int(data[12]['Value'])
+    a12_value = int(data[11]['Value'])
+    charlie_value = a13_value * a12_value
+
+    table2_data = {
+        'Alpha': alpha_value,
+        'Beta': beta_value,
+        'Charlie': charlie_value
+    }
+
+    return jsonify(table2_data)
 
 if __name__ == '__main__':
     app.run()
-
