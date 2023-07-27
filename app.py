@@ -15,12 +15,12 @@ def read_csv_file(file_path):
 def display_table1():
     # Read data from table1.csv
     data = read_csv_file('https://raw.githubusercontent.com/frankwong2001/Task/main/Table_Input.csv')
-    return render_template('table1.html', data=data)
+    return render_template('tables.html', data=data)
 
 @app.route('/table2-data')
 def get_table2_data():
     # Read data from table1.csv
-    data = read_csv_file('https://raw.githubusercontent.com/YourGitHubUsername/YourRepositoryName/main/table1.csv')
+    data = read_csv_file('https://raw.githubusercontent.com/frankwong2001/Task/main/Table_Input.csv')
     
     # Calculate Table 2 values
     a5_value = int(data[4]['Value'])
