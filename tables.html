@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Table Display</title>
+</head>
+<body>
+    <h1>Table 1</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Index</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in table1 %}
+            <tr>
+                <td>{{ row['Index'] }}</td>
+                <td>{{ row['Value'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h1>Table 2</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in table2 %}
+            <tr>
+                <td>{{ row['Category'] }}</td>
+                <td>{{ row['Value'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
