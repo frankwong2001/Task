@@ -1,47 +1,26 @@
-import csv
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template
+import pandas as pd
 
 app = Flask(__name__)
 
-def read_csv_file(file_path):
-    data = []
-    with open(file_path, 'r') as csvfile:
-        csvreader = csv.DictReader(csvfile)
-        for row in csvreader:
-            data.append(row)
-    return data
+# Read Table 1 data from CSV file
+table1_data = pd.read_csv('Table_Imput.csv', index_col=0)
 
 @app.route('/')
-def display_table1():
-    # Read data from table1.csv
-    data = read_csv_file('https://raw.githubusercontent.com/frankwong2001/Task/main/Table_Input.csv')
-    return render_template('tables.html', data=data)
+def display_tables():
+    # Calculate values for Table 2
+    alpha_value = table1_data.loc['A5', 'Value'] + table1_data.loc['A20', 'Value']
+    beta_value = table1_data.loc['A15', 'Value'] / table1_data.loc['A7', 'Value']
+    charlie_value = table1_data.loc['A13', 'Value'] * table1_data.loc['A12', 'Value']
 
-@app.route('/table2-data')
-def get_table2_data():
-    # Read data from table1.csv
-    data = read_csv_file('https://raw.githubusercontent.com/frankwong2001/Task/main/Table_Input.csv')
-    
-    # Calculate Table 2 values
-    a5_value = int(data[4]['Value'])
-    a20_value = int(data[19]['Value'])
-    alpha_value = a5_value + a20_value
+    # Prepare Table 2 data
+    table2_data = [
+        {"Category": "Alpha", "Value": alpha_value},
+        {"Category": "Beta", "Value": beta_value},
+        {"Category": "Charlie", "Value": charlie_value}
+    ]
 
-    a15_value = int(data[14]['Value'])
-    a7_value = int(data[6]['Value'])
-    beta_value = a15_value / a7_value
-
-    a13_value = int(data[12]['Value'])
-    a12_value = int(data[11]['Value'])
-    charlie_value = a13_value * a12_value
-
-    table2_data = {
-        'Alpha': alpha_value,
-        'Beta': beta_value,
-        'Charlie': charlie_value
-    }
-
-    return jsonify(table2_data)
+    return render_template('tables.html', table1=table1_data, table2=table2_data)
 
 if __name__ == '__main__':
     app.run()
