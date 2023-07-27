@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Table 1 Display</title>
+    <title>Tables Display</title>
 </head>
 <body>
     <h1>Table 1</h1>
     <table>
         <thead>
             <tr>
-                <th>Index</th>
+                <th>Index #</th>
                 <th>Value</th>
             </tr>
         </thead>
         <tbody>
-            {% for row in data %}
+            {% for index, value in table1.iterrows() %}
             <tr>
-                <td>{{ row['Index'] }}</td>
-                <td>{{ row['Value'] }}</td>
+                <td>{{ index }}</td>
+                <td>{{ value['Value'] }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
     <h1>Table 2</h1>
-    <table id="table2">
+    <table>
         <thead>
             <tr>
                 <th>Category</th>
@@ -31,31 +31,13 @@
             </tr>
         </thead>
         <tbody>
+            {% for entry in table2 %}
             <tr>
-                <td>Alpha</td>
-                <td id="alpha-value"></td>
+                <td>{{ entry['Category'] }}</td>
+                <td>{{ entry['Value'] }}</td>
             </tr>
-            <tr>
-                <td>Beta</td>
-                <td id="beta-value"></td>
-            </tr>
-            <tr>
-                <td>Charlie</td>
-                <td id="charlie-value"></td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        // Fetch Table 2 data from Flask app and update the table
-        $(document).ready(function () {
-            $.getJSON('/table2-data', function (data) {
-                $('#alpha-value').text(data.Alpha);
-                $('#beta-value').text(data.Beta);
-                $('#charlie-value').text(data.Charlie);
-            });
-        });
-    </script>
 </body>
 </html>
